@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://apis.google.com/js/platform.js?onload=googleSignInSetUp" defer async></script>
+<script src="https://cdn.jsdelivr.net/npm/dat.gui@0.7.9/build/dat.gui.min.js"></script>
+	  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+ <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="crossorigin="">
+ <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="crossorigin=""></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+ 
+ <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<script src="https://unpkg.com/wrld.js@1.x.x"></script>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>SalesBot</title>
+  <style>
+  div{
+     background-color: black;
+	 color: lightgreen;
+	 border: solid lightgreen 1px;
+  }
+
+  input, button, select, textarea{
+  background: linear-gradient(gray,black);
+	color: lightgreen;
+	border: solid 1px green;
+	width: 14%;
+  }
+  button:hover{
+    text-decoration: underline;
+  }
+  input::placeholder{
+   color: lightgreen;
+  }
+  #sndr-nav{
+  width: 100%;
+  }
+  #sndr-nav > div{
+    width: 48%;
+	
+  }
+  .nav-div > input, button, select{
+      text-align: center;
+	  width: 32.6%;
+  }
+#email-list{
+ width: 35%;
+ float: left;
+
+}
+    #sndr-nav, #inbox-inpt,.email-div{
+	  display: flex;
+	  flex: 1;
+	
+	}
+	#inbox-div{
+	  width: 48%;
+	}
+#inbox-inpt{
+ width: 100%;
+}
+#inbox-inpt > input{
+ width: 40%;
+}
+#inbox-inpt > button{
+  width: 15%;
+}
+.email-div{
+  width: 100%;
+  text-align: center;
+}
+.email-div:hover{
+  text-decoration: underline;
+  background: linear-gradient(gray, black);
+}
+#email-div>button{
+  width: 50%;
+}
+h4{
+ text-overflow: ellipsis;
+ width: 100%;
+ cursor: pointer;
+}
+#email-map{
+ width: 65%;
+ height: 770px;
+ float: right;
+}
+.map{
+ width: 100%;
+ height: inherit;
+ background-image:url('https://www.freeiconspng.com/thumbs/maps-icon/maps-icon-16.png');
+background-repeat: no-repeat;
+background-size: 60% 100%;
+background-attachment: fixed;
+background-position: right;
+background-color: lightgreen;
+}
+textarea{
+ width: 100%;
+ resize: none;
+ border: solid 1px lightgreen;
+background: linear-gradient(black, darkgray);
+}
+#emails{
+  overflow-y: auto;
+  overflow-x: hidden;
+  white-space: nowrap;
+  width: 100%;
+  height: 700px;
+  background-image:url('./email-icon.png');
+ background-repeat: no-repeat;
+ background-size: 34% 60%;
+ background-position: left center;
+ background-attachment: fixed;
+ background-color: lightgreen;
+ border: solid 4px black;
+}
+input[type=email]{
+color: lightgreen;
+}
+  </style>
+  </head>
+  <body>
+  <div id="sndr-nav">
+  <div class="nav-div" id="sbjct-div">
+  
+    <input placeholder="email subject,*insurance sales company*" value="" type="text">
+	<button>Add</button>
+	<select>
+	  <option>subject text</option>
+	</select>
+  </div>
+  <div class="nav-div" id="sndr-email">
+   <input placeholder="your work email" type="text"/>
+   <button>add</button>
+   <select>
+	  <option>work emails</option>
+	</select>
+  </div>
+  <div class="nav-div" id="cmpny">
+    <input placeholder="company name" type="text"/>
+	<button>set</button>
+	<select>
+	<option>company name</option>
+	</select>
+	
+  </div>
+  </div>
+  <div id="email-list">
+  <div style="width: 100%" id="message">
+    <textarea placeholder="sender message"></textarea>
+	
+  </div>
+  <div id="inbox-inpt">
+  <input type="email" placeholder="new email"/>
+  <button>ADD</button>
+    <button>find</button>
+	<button>send</button>
+	<button>clear</button>
+  </div>
+  <div style="width: 100%; " id="emails">
+  <div class="email-div" style="display: none">
+  <h4 href="example@domail.com">example@domail.com</h4>
+	<button>X</button>
+  </div>
+  <div class="email-div" style="display: noe">
+  <h4 href="example@domail.com">example@domail.com</h4>
+	<button>X</button>
+
+  </div>
+  <div class="email-div" style="display: non">
+  <h4 href="example@domail.com">example@domail.com</h4>
+	<button>X</button>
+
+  </div>
+  <div class="email-div" style="display: noe">
+  <h4 href="example@domail.com">example@domail.com</h4>
+	<button>X</button>
+
+  </div>
+    <div class="email-div" style="display: one">
+  <h4 href="example@domail.com">example@domail.com</h4>
+	<button>X</button>
+
+  </div>
+    <div class="email-div" style="display: one">
+  <h4 href="example@domail.com">example@domail.com</h4>
+	<button>X</button>
+
+  </div>
+    <div class="email-div" style="display: one">
+  <h4 href="example@domail.com">example@domail.com</h4>
+	<button>X</button>
+
+  </div>
+    <div class="email-div" style="display: one">
+  <h4 href="example@domail.com">example@domail.com</h4>
+	<button>X</button>
+
+  </div>
+    <div class="email-div" style="display: nne">
+  <h4 href="example@domail.com">example@domail.com</h4>
+	<button>X</button>
+
+  </div>
+    <div class="email-div" style="display: nne">
+  <h4 href="example@domail.com">example@domail.com</h4>
+	<button>X</button>
+
+  </div>
+    <div class="email-div" style="display: noe">
+  <h4 href="example@domail.com">example@domail.com</h4>
+	<button>X</button>
+
+  </div>
+    
+  <div class="email-div" style="display: none">
+  <h4 href="example@domail.com">example@domail.com</h4>
+	<button>X</button>
+
+  </div>
+  <div class="email-div" style="display: none">
+  <h4 href="example@domail.com">example@domail.com</h4>
+	<button>X</button>
+  </div>
+  <div class="email-div" style="display: noe">
+  <h4 href="example@domail.com">example@domail.com</h4>
+	<button>X</button>
+
+  </div>
+  <div class="email-div" style="display: non">
+  <h4 href="example@domail.com">example@domail.com</h4>
+	<button>X</button>
+
+  </div>
+  <div class="email-div" style="display: noe">
+  <h4 href="example@domail.com">example@domail.com</h4>
+	<button>X</button>
+
+  </div>
+    <div class="email-div" style="display: one">
+  <h4 href="example@domail.com">example@domail.com</h4>
+	<button>X</button>
+
+  </div>
+    <div class="email-div" style="display: one">
+  <h4 href="example@domail.com">example@domail.com</h4>
+	<button>X</button>
+
+  </div>
+    <div class="email-div" style="display: one">
+  <h4 href="example@domail.com">example@domail.com</h4>
+	<button>X</button>
+
+  </div>
+    <div class="email-div" style="display: one">
+  <h4 href="example@domail.com">example@domail.com</h4>
+	<button>X</button>
+
+  </div>
+    <div class="email-div" style="display: nne">
+  <h4 href="example@domail.com">example@domail.com</h4>
+	<button>X</button>
+
+  </div>
+    <div class="email-div" style="display: nne">
+  <h4 href="example@domail.com">example@domail.com</h4>
+	<button>X</button>
+
+  </div>
+    <div class="email-div" style="display: noe">
+  <h4 href="example@domail.com">example@domail.com</h4>
+	<button>X</button>
+
+  </div>
+    
+  <div class="email-div" style="display: none">
+  <h4 href="example@domail.com">example@domail.com</h4>
+	<button>X</button>
+
+  </div>
+  </div>
+  </div>
+  
+  <div id="email-map">
+    <div id="map" class="map" style="width: 100%; height 700px;">
+	  
+	</div>
+  </div>
+  </body>
+  <script type="text/javascript" src="./SalesBot.js" async defer></script>
+  </html>
